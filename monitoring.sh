@@ -1,7 +1,7 @@
 #!/bin/bash //tells the OS to invoke the shell and run the following commands
-arc=$(uname -a) // uname prints basic system information. -a displays all available information
-pcpu=$(grep "physical id" /proc/cpuinfo | sort | uniq | wc -l) // search for the line "physical id" in /proc/cpuinfo and return them. Then sort sorts the response, removes the duplicates (uniq), does a count of the lines (wc) and prints the number of lines (-l)
-vcpu=$(grep "^processor" /proc/cpuinfo | wc -l) // look for lines that start with "processor". count the lines and return them.
+arc=$(uname -a) //uname prints basic system information. -a displays all available information
+pcpu=$(grep "physical id" /proc/cpuinfo | sort | uniq | wc -l) //search for the lines "physical id" in /proc/cpuinfo and return them. Then sorts the response, removes the duplicates (uniq), does a count of the lines (wc) and prints the number of lines (-l)
+vcpu=$(grep "^processor" /proc/cpuinfo | wc -l) //look for lines that start with "processor". count the lines and return them.
 fram=$(free -m | awk '$1 == "Mem:" {print $2}') // gets the memory usage (free) in MB (-m). Print the figure in field 2 (print $2) of line Mem.
 uram=$(free -m | awk '$1 == "Mem:" {print $3}') // gets the memory usage (free) in MB (-m). Print the figure in field 3 (print $3) of line Mem.
 pram=$(free | awk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}')// get the memory usage (free) then divide field 3 by field 2, multiply by 100 and print the result to two decimal places.
@@ -14,7 +14,7 @@ lvmu=$(if [ $(lsblk | grep "lvm" | wc -l) -eq 0 ]; then echo no; else echo yes; 
 ctcp=$(ss -neopt state established | wc -l)// ss shows socket statistics, -neopt state established will show you only TCP sessions established. count and return the number of lines.
 ulog=$(users | wc -w)// the users command will print the users logged in on a single line. the wc -w command will count the number of words and return the total
 ip=$(hostname -I)// hostname will return the current host name and domain name on a line. -I will show network address of the host
-mac=$(ifconfig -a | grep "ether" | awk '{print $2}') // show MAC (Media Access Control) address of your server
+mac=$(ip link show | grep "ether" | awk '{print $2}') // show MAC (Media Access Control) address of your server
 cmds=$(journalctl _COMM=sudo | grep COMMAND | wc -l)// journalctl gets all the journal entries for sudo, filter by COMMAND to get all commands run by sudo then count the lines and return
 wall "	#Architecture: $arc
 	#CPU physical: $pcpu
